@@ -13,9 +13,21 @@ export class UserRepository {
     return User.findById(id);
   }
 
+  async findByIdWithPassword(id: string): Promise<IUser | null> {
+    return User.findById(id).select("+password");
+  }
+
   async existsByEmail(email: string): Promise<boolean> {
     const user = await User.exists({ email });
     return !!user;
+  }
+
+  async updateById(id: string, updateData: Partial<IUser>): Promise<IUser | null> {
+    return User.findByIdAndUpdate(id, updateData, { new: true, runValidators: true });
+  }
+
+  async deleteById(id: string): Promise<IUser | null> {
+    return User.findByIdAndDelete(id);
   }
 }
 

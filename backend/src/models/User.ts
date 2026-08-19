@@ -66,6 +66,12 @@ const userSchema = new Schema<IUser>(
   {
     timestamps: true,
     versionKey: false,
+    toJSON: {
+      transform(_doc, ret) {
+        delete (ret as Record<string, any>).password;
+        return ret;
+      },
+    },
   }
 );
 

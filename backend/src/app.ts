@@ -5,6 +5,7 @@ import compression from "compression";
 
 import { requestIdMiddleware } from "./middlewares/requestId.middleware";
 import { requestLoggerMiddleware } from "./middlewares/requestLogger.middleware";
+import { rateLimiterMiddleware } from "./middlewares/rateLimiter.middleware";
 import { errorMiddleware } from "./middlewares/error.middleware";
 import routes from "./routes";
 
@@ -19,6 +20,7 @@ app.use(express.urlencoded({ extended: true }));
 
 app.use(requestIdMiddleware);
 app.use(requestLoggerMiddleware);
+app.use(rateLimiterMiddleware(120, 15 * 60 * 1000));
 
 app.get("/health", (_, res) => {
   res.status(200).json({
@@ -27,8 +29,6 @@ app.get("/health", (_, res) => {
   });
 });
 
-// Routes yahan register hongi
-// app.use("/api/v1/auth", authRoutes);
 app.use("/api/v1", routes);
 app.use(errorMiddleware);
 
