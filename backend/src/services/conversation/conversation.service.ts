@@ -21,7 +21,13 @@ export class ConversationService {
       return this.sendMessage(conversation._id.toString(), userId, payload.initialMessage);
     }
 
-    return conversation;
+    return {
+      conversationId: conversation._id.toString(),
+      userMessage: null,
+      reply: null,
+      contextUsed: false,
+      conversation,
+    };
   }
 
   async sendMessage(conversationId: string, userId: string, userMessage: string) {

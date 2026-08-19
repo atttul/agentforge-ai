@@ -3,6 +3,7 @@ import cors from "cors";
 import helmet from "helmet";
 import compression from "compression";
 
+import { env } from "./config/env";
 import { requestIdMiddleware } from "./middlewares/requestId.middleware";
 import { requestLoggerMiddleware } from "./middlewares/requestLogger.middleware";
 import { rateLimiterMiddleware } from "./middlewares/rateLimiter.middleware";
@@ -11,7 +12,18 @@ import routes from "./routes";
 
 const app = express();
 
-app.use(cors());
+const allowedOrigins = [
+  env.FRONTEND_URL,
+  "http://localhost:5173",
+  "http://localhost:3000",
+].filter(Boolean);
+
+app.use(
+  cors({
+    origin: allowedOrigins,
+    credentials: true,
+  })
+);
 app.use(helmet());
 app.use(compression());
 
