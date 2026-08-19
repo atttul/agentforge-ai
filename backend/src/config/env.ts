@@ -15,6 +15,7 @@ export const env = {
   PINECONE_INDEX: process.env.PINECONE_INDEX || "",
 
   GEMINI_API_KEY: process.env.GEMINI_API_KEY || "",
+  OPENROUTER_API_KEY: process.env.OPENROUTER_API_KEY || "",
 
   JWT_SECRET: process.env.JWT_SECRET || "",
   JWT_EXPIRES_IN: process.env.JWT_EXPIRES_IN || "7d",

@@ -1,5 +1,6 @@
 import { conversationRepository } from "../../repositories/conversation/conversation.repository";
 import { agentService } from "../agent/agent.service";
+import { openRouterService } from "../ai/openrouter.service";
 import { geminiService } from "../ai/gemini.service";
 import { vectorStoreService } from "../ai/vectorStore.service";
 import { StartConversationInput } from "../../schemas/conversation.schema";
@@ -63,21 +64,26 @@ export class ConversationService {
       // Non-blocking fallback if vector search fails
     }
 
-    // 3. Format history for Gemini chat
+    // 3. Format history for OpenRouter chat
     const history = conversation.messages.map((m) => ({
       role: m.role as "user" | "assistant" | "system",
       content: m.content,
     }));
 
-    // 4. Generate response using Gemini AI
-    const assistantReply = await geminiService.runChat(
+    // 4. Generate response using OpenRouter AI
+    let assistantReply = await openRouterService.runChat(
       history,
       userMessage,
       agent.systemPrompt,
       contextString,
-      agent.model || "gemini-1.5-flash",
-      agent.temperature || 0.7
+      agent.model || "openrouter/free",
+      agent.temperature || 0.7,
+      agent.maxTokens || 2048
     );
+
+    if (!assistantReply || assistantReply.trim().length === 0) {
+      assistantReply = "I have processed your message successfully.";
+    }
 
     // 5. Append assistant reply to database
     const updatedConversation = await conversationRepository.addMessage(

@@ -44,7 +44,7 @@ const agentSchema = new Schema<IAgent>(
     model: {
       type: String,
       required: true,
-      default: "gemini-1.5-flash",
+      default: "openrouter/free",
     },
     temperature: {
       type: Number,

@@ -3,7 +3,7 @@ import { agentRepository } from "../../repositories/agent/agent.repository";
 import { CreateAgentInput, UpdateAgentInput } from "../../schemas/agent.schema";
 import { ApiError } from "../../shared/ApiError";
 import { StatusCodes } from "../../shared/StatusCodes";
-import { geminiService } from "../ai/gemini.service";
+import { openRouterService } from "../ai/openrouter.service";
 
 export class AgentService {
   async createAgent(userId: string, payload: CreateAgentInput) {
@@ -79,11 +79,12 @@ export class AgentService {
   async executeAgentDirect(id: string, userId: string, prompt: string) {
     const agent = await this.getAgentById(id, userId);
 
-    const responseText = await geminiService.generateText(
+    const responseText = await openRouterService.generateText(
       prompt,
       agent.systemPrompt,
       agent.model,
-      agent.temperature
+      agent.temperature,
+      agent.maxTokens
     );
 
     return {

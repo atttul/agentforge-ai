@@ -6,7 +6,7 @@ export const createAgentSchema = z.object({
     name: z.string().min(2, "Name must be at least 2 characters").max(100),
     description: z.string().optional(),
     systemPrompt: z.string().min(5, "System prompt must be at least 5 characters"),
-    model: z.string().optional().default("gemini-1.5-flash"),
+    model: z.string().optional().default("openrouter/free"),
     temperature: z.number().min(0).max(2).optional().default(0.7),
     maxTokens: z.number().min(64).max(8192).optional().default(2048),
     tools: z.array(z.string()).optional().default([]),
